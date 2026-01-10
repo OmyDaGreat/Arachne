@@ -1,6 +1,4 @@
-import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 
 val user: String by project
 val dev: String by project
@@ -14,11 +12,12 @@ val desc: String by project
 val inception: String by project
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.vanniktech.mavenPublish)
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.maven.publish)
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlinter)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.serialization)
 }
 
 group = g
@@ -26,34 +25,6 @@ version = v
 
 @OptIn(ExperimentalWasmDsl::class)
 kotlin {
-    jvm()
-
-    androidLibrary {
-        namespace = "$g.$artifact"
-        compileSdk =
-            libs.versions.android.compileSdk
-                .get()
-                .toInt()
-        minSdk =
-            libs.versions.android.minSdk
-                .get()
-                .toInt()
-
-        withJava()
-        withHostTestBuilder {}.configure {}
-        withDeviceTestBuilder {
-            sourceSetTreeName = "test"
-        }
-
-        compilerOptions {
-            jvmTarget.set(JVM_11)
-        }
-    }
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
     js {
         browser {
             testTask {
@@ -64,27 +35,18 @@ kotlin {
         }
         nodejs()
     }
-    wasmJs {
-        browser {
-            testTask {
-                useKarma {
-                    useChromiumHeadless()
-                }
-            }
-        }
-        nodejs()
-    }
-
-    applyDefaultHierarchyTemplate()
 
     @Suppress("unused")
     sourceSets {
-        val commonMain by getting {
+        val jsMain by getting {
             dependencies {
                 implementation(libs.kermit)
+                implementation(libs.compose.runtime)
+                implementation(libs.bundles.kobweb)
+                implementation(libs.kotlinx.serialization.json)
             }
         }
-        val commonTest by getting {
+        val jsTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
             }
