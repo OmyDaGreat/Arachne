@@ -48,12 +48,12 @@ class PhysicsSystem(
 
             // Apply gravity
             if (rb.useGravity) {
-                rb.acceleration = rb.acceleration + (gravity * rb.gravityScale)
+                rb.acceleration += gravity * rb.gravityScale
             }
 
             // Apply drag
-            rb.velocity = rb.velocity * (1f - rb.drag)
-            rb.angularVelocity *= (1f - rb.angularDrag)
+            rb.velocity *= 1f - rb.drag
+            rb.angularVelocity *= 1f - rb.angularDrag
         }
     }
 
@@ -68,11 +68,11 @@ class PhysicsSystem(
             if (rb.isStatic) return@forEach
 
             // Update velocity
-            rb.velocity = rb.velocity + (rb.acceleration * deltaTime)
+            rb.velocity += (rb.acceleration * deltaTime)
 
             // Update position
             if (!rb.isKinematic) {
-                transform.position = transform.position + (rb.velocity * deltaTime)
+                transform.position += (rb.velocity * deltaTime)
                 transform.rotation += rb.angularVelocity * deltaTime
             }
 
@@ -126,20 +126,20 @@ class PhysicsSystem(
         transformA: Transform,
         transformB: Transform,
     ): Collision? =
-        when {
-            colliderA is CircleCollider && colliderB is CircleCollider -> {
+        when (colliderA) {
+            is CircleCollider if colliderB is CircleCollider -> {
                 checkCircleCircle(entityA, entityB, colliderA, colliderB, transformA, transformB)
             }
 
-            colliderA is BoxCollider && colliderB is BoxCollider -> {
+            is BoxCollider if colliderB is BoxCollider -> {
                 checkBoxBox(entityA, entityB, colliderA, colliderB, transformA, transformB)
             }
 
-            colliderA is CircleCollider && colliderB is BoxCollider -> {
+            is CircleCollider if colliderB is BoxCollider -> {
                 checkCircleBox(entityA, entityB, colliderA, colliderB, transformA, transformB)
             }
 
-            colliderA is BoxCollider && colliderB is CircleCollider -> {
+            is BoxCollider if colliderB is CircleCollider -> {
                 checkCircleBox(entityB, entityA, colliderB, colliderA, transformB, transformA)?.let {
                     it.copy(
                         entityA = entityA,
@@ -236,9 +236,8 @@ class PhysicsSystem(
         if (distance < colliderA.radius) {
             val normal = (circleCenter - closest).normalized()
             val penetration = colliderA.radius - distance
-            val point = closest
 
-            return Collision(entityA, entityB, colliderA, colliderB, normal, penetration, point)
+            return Collision(entityA, entityB, colliderA, colliderB, normal, penetration, closest)
         }
 
         return null
@@ -268,17 +267,17 @@ class PhysicsSystem(
                     }
 
                     rbA?.isStatic == true -> {
-                        transformB.position = transformB.position + correction
+                        transformB.position += correction
                     }
 
                     rbB?.isStatic == true -> {
-                        transformA.position = transformA.position - correction
+                        transformA.position -= correction
                     }
 
                     rbA != null && rbB != null -> {
                         val totalMass = rbA.mass + rbB.mass
-                        transformA.position = transformA.position - (correction * (rbB.mass / totalMass))
-                        transformB.position = transformB.position + (correction * (rbA.mass / totalMass))
+                        transformA.position -= (correction * (rbB.mass / totalMass))
+                        transformB.position += (correction * (rbA.mass / totalMass))
                     }
                 }
 
@@ -387,7 +386,7 @@ class PhysicsSystem(
         if (discriminant < 0) return null
 
         val t = (-b - sqrt(discriminant)) / (2 * a)
-        if (t < 0 || t > maxDistance) return null
+        if (t !in 0.0..maxDistance.toDouble()) return null
 
         val point = origin + (direction * t)
         val normal = (point - center).normalized()
@@ -418,7 +417,6 @@ class PhysicsSystem(
 
         val t = if (tmin >= 0) tmin else tmax
         val point = origin + (direction * t)
-        val center = rect.center
 
         val normal =
             when {

@@ -57,7 +57,7 @@ class PathfindingGrid(
     fun isInBounds(
         x: Int,
         y: Int,
-    ) = x >= 0 && x < width && y >= 0 && y < height
+    ) = x in 0..<width && y >= 0 && y < height
 
     fun getNode(
         x: Int,

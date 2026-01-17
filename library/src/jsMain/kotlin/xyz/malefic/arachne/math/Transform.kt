@@ -8,7 +8,7 @@ data class Transform(
     var scale: Vector2 = Vector2.ONE.copy(),
 ) : Component {
     fun translate(offset: Vector2) {
-        position = position + offset
+        position += offset
     }
 
     fun rotate(angle: Float) {

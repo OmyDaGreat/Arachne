@@ -98,7 +98,7 @@ object Easing {
         return when (t) {
             0f -> 0f
             1f -> 1f
-            else -> -2f.pow(10f * t - 10f) * sin((t * 10f - 10.75f) * c4)
+            else -> -(2f.pow(10f * t - 10f)) * sin((t * 10f - 10.75f) * c4)
         }
     }
 

@@ -8,7 +8,6 @@ kobweb = "0.23.3"
 serialization = "1.8.0"
 
 [libraries]
-kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "compose" }
 kobweb-core = { module = "com.varabyte.kobweb:kobweb-core", version.ref = "kobweb" }

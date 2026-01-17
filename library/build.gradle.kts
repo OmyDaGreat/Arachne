@@ -36,7 +36,6 @@ kotlin {
         nodejs()
     }
 
-    @Suppress("unused")
     sourceSets {
         val jsMain by getting {
             dependencies {
@@ -44,11 +43,6 @@ kotlin {
                 implementation(libs.compose.runtime)
                 implementation(libs.bundles.kobweb)
                 implementation(libs.kotlinx.serialization.json)
-            }
-        }
-        val jsTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
             }
         }
     }

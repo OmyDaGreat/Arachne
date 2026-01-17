@@ -44,7 +44,7 @@ data class Tilemap(
         y: Int,
         layerIndex: Int = 0,
     ): Int {
-        if (x < 0 || x >= width || y < 0 || y >= height) return -1
+        if (x !in 0..<width || y < 0 || y >= height) return -1
         if (layerIndex < 0 || layerIndex >= layers.size) return -1
         return layers[layerIndex].tiles[y][x]
     }
@@ -55,7 +55,7 @@ data class Tilemap(
         tileId: Int,
         layerIndex: Int = 0,
     ) {
-        if (x < 0 || x >= width || y < 0 || y >= height) return
+        if (x !in 0..<width || y < 0 || y >= height) return
         if (layerIndex < 0 || layerIndex >= layers.size) return
         layers[layerIndex].tiles[y][x] = tileId
     }

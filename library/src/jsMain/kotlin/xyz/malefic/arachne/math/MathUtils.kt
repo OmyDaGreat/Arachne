@@ -4,11 +4,11 @@ import kotlin.math.abs
 import kotlin.random.Random
 
 object MathUtils {
-    val PI = kotlin.math.PI.toFloat()
-    val TWO_PI = (kotlin.math.PI * 2).toFloat()
-    val HALF_PI = (kotlin.math.PI / 2).toFloat()
-    val DEG_TO_RAD = (kotlin.math.PI / 180).toFloat()
-    val RAD_TO_DEG = (180 / kotlin.math.PI).toFloat()
+    const val PI = kotlin.math.PI.toFloat()
+    const val TWO_PI = (kotlin.math.PI * 2).toFloat()
+    const val HALF_PI = (kotlin.math.PI / 2).toFloat()
+    const val DEG_TO_RAD = (kotlin.math.PI / 180).toFloat()
+    const val RAD_TO_DEG = (180 / kotlin.math.PI).toFloat()
     const val EPSILON = 0.000001f
 
     fun lerp(

@@ -39,7 +39,7 @@ object GameDebug {
             val text = "Entities: ${world.entityCount()}"
             ctx.strokeText(text, x, offsetY)
             ctx.fillText(text, x, offsetY)
-            offsetY += 20
+            // offsetY += 20
         }
 
         ctx.restore()

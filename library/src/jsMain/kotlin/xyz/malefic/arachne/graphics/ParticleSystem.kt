@@ -38,8 +38,8 @@ data class Particle(
         }
 
         // Update physics
-        velocity = velocity + (gravity * deltaTime)
-        position = position + (velocity * deltaTime)
+        velocity += gravity * deltaTime
+        position += velocity * deltaTime
         rotation += angularVelocity * deltaTime
 
         // Update size and alpha

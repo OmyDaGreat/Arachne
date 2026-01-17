@@ -17,13 +17,13 @@ data class RigidBody(
 ) : Component {
     fun addForce(force: Vector2) {
         if (!isKinematic && !isStatic) {
-            acceleration = acceleration + (force / mass)
+            acceleration += force / mass
         }
     }
 
     fun addImpulse(impulse: Vector2) {
         if (!isKinematic && !isStatic) {
-            velocity = velocity + (impulse / mass)
+            velocity += impulse / mass
         }
     }
 
