@@ -162,6 +162,14 @@ object AudioManager {
         }
     }
 
+    fun pauseSound(id: String) {
+        playingAudio[id]?.pause()
+    }
+
+    fun resumeSound(id: String) {
+        playingAudio[id]?.play()
+    }
+
     fun pauseAll() {
         playingAudio.values.forEach { it.pause() }
     }

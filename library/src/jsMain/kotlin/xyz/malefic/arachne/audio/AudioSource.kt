@@ -13,26 +13,35 @@ data class AudioSource(
     var minDistance: Float = 1f,
     var maxDistance: Float = 100f,
     var isPlaying: Boolean = false,
+    var isPaused: Boolean = false,
     private var audioId: String? = null,
 ) : Component {
     fun play() {
         if (isPlaying) stop()
         audioId = AudioManager.playSound(audioPath, volume, pitch, loop)
         isPlaying = audioId != null
+        isPaused = false
     }
 
     fun stop() {
         audioId?.let { AudioManager.stopSound(it) }
         audioId = null
         isPlaying = false
+        isPaused = false
     }
 
     fun pause() {
-        // TODO: Implement pause functionality
+        if (isPlaying && !isPaused) {
+            audioId?.let { AudioManager.pauseSound(it) }
+            isPaused = true
+        }
     }
 
     fun resume() {
-        // TODO: Implement resume functionality
+        if (isPlaying && isPaused) {
+            audioId?.let { AudioManager.resumeSound(it) }
+            isPaused = false
+        }
     }
 
     fun updateVolume(
