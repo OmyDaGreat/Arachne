@@ -55,55 +55,43 @@ class PhysicsDemo : Game() {
     }
 
     private fun createGround() {
-        val ground =
-            Entity().apply {
-                tag = "ground"
-                add(Transform(position = Vector2(400f, 550f)))
-                add(
-                    Sprite(
-                        texture = "ground.png",
-                        width = 800f,
-                        height = 50f,
-                    ),
-                )
-                add(BoxCollider(size = Vector2(800f, 50f)))
-                add(RigidBody(isStatic = true))
-            }
-        world.addEntity(ground)
+        world.addEntity {
+            tag = "ground"
+            transform(position = Vector2(400f, 550f))
+            sprite(texture = "ground.png", width = 800f, height = 50f)
+            boxCollider(size = Vector2(800f, 50f))
+            rigidBody(isStatic = true)
+        }
     }
 
     private fun createPlayer() {
         player =
-            Entity().apply {
+            entity {
                 tag = "player"
-                add(Transform(position = Vector2(400f, 100f)))
-                add(Sprite(texture = "player.png", width = 32f, height = 32f))
-                add(CircleCollider(radius = 16f))
-                add(RigidBody(mass = 1f, drag = 0.1f))
-                add(
-                    ParticleEmitter(
-                        emissionRate = 10f,
-                        startColor = "#ff6b6b",
-                        endColor = "#ffd93d",
-                        startSize = 3f,
-                        velocity = Vector2(0f, 50f),
-                        velocityVariation = Vector2(20f, 10f),
-                    ),
-                )
+                transform(position = Vector2(400f, 100f))
+                sprite(texture = "player.png", width = 32f, height = 32f)
+                circleCollider(radius = 16f)
+                rigidBody(mass = 1f, drag = 0.1f)
+                particleEmitter {
+                    emissionRate = 10f
+                    startColor = "#ff6b6b"
+                    endColor = "#ffd93d"
+                    startSize = 3f
+                    velocity = Vector2(0f, 50f)
+                    velocityVariation = Vector2(20f, 10f)
+                }
             }
         world.addEntity(player)
     }
 
     private fun createBox(position: Vector2) {
-        val box =
-            Entity().apply {
-                tag = "box"
-                add(Transform(position = position))
-                add(Sprite(texture = "box.png", width = 40f, height = 40f))
-                add(BoxCollider(size = Vector2(40f, 40f)))
-                add(RigidBody(mass = 0.5f, drag = 0.05f))
-            }
-        world.addEntity(box)
+        world.addEntity {
+            tag = "box"
+            transform(position = position)
+            sprite(texture = "box.png", width = 40f, height = 40f)
+            boxCollider(size = Vector2(40f, 40f))
+            rigidBody(mass = 0.5f, drag = 0.05f)
+        }
     }
 
     override fun update(deltaTime: Double) {

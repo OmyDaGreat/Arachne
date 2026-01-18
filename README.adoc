@@ -27,7 +27,7 @@ A comprehensive 2D game development library built on Kotlin/JS, designed to work
 - **Raycasting**: Line-of-sight and projectile mechanics
 - **Particle System**: Advanced effects with multiple emission shapes
 - **Audio Manager**: Sound effects and music with volume control
-- **Touch Input**: Full multi-touch support for mobile games
+- **Touch Input**: Full multitouch support for mobile games
 - **Tweening System**: 25+ easing functions for smooth animations
 - **Enhanced Camera**: Shake effects for game feel
 - **Enhanced Debug**: Collider and velocity visualization
@@ -71,7 +71,7 @@ dependencies {
 
 [source,kotlin]
 ----
-class MyGame(canvas: HTMLCanvasElement) : Game(canvas) {
+class MyGame : Game() {
     private val world = World()
 
     override fun create() {
@@ -79,15 +79,14 @@ class MyGame(canvas: HTMLCanvasElement) : Game(canvas) {
         world.addSystem(PhysicsSystem(gravity = Vector2(0f, 980f)))
         world.addSystem(RenderSystem(ctx, camera))
 
-        // Create player with physics
-        val player = Entity().apply {
-            add(Transform(position = Vector2(400f, 300f)))
-            add(Sprite(texture = "player.png", width = 32f, height = 32f))
-            add(CircleCollider(radius = 16f))
-            add(RigidBody(mass = 1f))
+        // Create player with physics using DSL
+        world.addEntity {
+            tag = "Player"
+            transform(position = Vector2(400f, 300f))
+            sprite(texture = "player.png", width = 32f, height = 32f)
+            circleCollider(radius = 16f)
+            rigidBody(mass = 1f)
         }
-
-        world.addEntity(player)
     }
 
     override fun update(deltaTime: Double) {
@@ -103,10 +102,16 @@ class MyGame(canvas: HTMLCanvasElement) : Game(canvas) {
     }
 }
 
-fun main() {
-    val canvas = document.getElementById("gameCanvas") as HTMLCanvasElement
-    val game = MyGame(canvas)
-    game.start()
+// In your Kobweb page:
+@Composable
+fun GamePage() {
+    Box(Modifier.fillMaxSize()) {
+        GameCanvas(
+            width = 800,
+            height = 600,
+            gameFactory = { MyGame() }
+        )
+    }
 }
 ----
 
@@ -116,11 +121,12 @@ fun main() {
 
 [source,kotlin]
 ----
-// Create physics entity
-val entity = Entity().apply {
-    add(Transform(position = Vector2(100f, 100f)))
-    add(BoxCollider(size = Vector2(32f, 32f)))
-    add(RigidBody(mass = 1f, useGravity = true))
+// Create physics entity using DSL
+val entity = entity {
+    tag = "PhysicsBox"
+    transform(position = Vector2(100f, 100f))
+    boxCollider(size = Vector2(32f, 32f))
+    rigidBody(mass = 1f, useGravity = true)
 }
 
 // Apply forces
@@ -147,18 +153,34 @@ val hit = physicsSystem.raycast(
 
 [source,kotlin]
 ----
-val emitter = ParticleEmitter(
+// Add particle emitter to entity using DSL
+entity {
+    tag = "Explosion"
+    transform(position = Vector2(400f, 300f))
+    particleEmitter {
+        emissionRate = 20f
+        startColor = "#ff6b6b"
+        endColor = "#ffd93d"
+        velocity = Vector2(0f, -100f)
+        gravity = Vector2(0f, 200f)
+        emitterShape = EmitterShape.CIRCLE
+    }
+}
+
+// Or add to existing entity
+entity.add(ParticleEmitter(
     emissionRate = 20f,
     startColor = "#ff6b6b",
     endColor = "#ffd93d",
     velocity = Vector2(0f, -100f),
     gravity = Vector2(0f, 200f),
     emitterShape = EmitterShape.CIRCLE
-)
+))
 
-entity.add(emitter)
-emitter.play()
-emitter.burst() // Explosion effect
+// Control the emitter
+val emitter = entity.get<ParticleEmitter>()
+emitter?.play()
+emitter?.burst() // Explosion effect
 ----
 
 === Audio
@@ -291,9 +313,9 @@ CanvasEffects.combineFilters(ctx, listOf(
 
 == 📊 Statistics
 
-- **Total Files**: 43 Kotlin files
-- **Lines of Code**: ~4,500 lines
-- **Packages**: 11 fully-featured packages
+- **Total Files**: 44 Kotlin files
+- **Lines of Code**: ~4,615 lines
+- **Packages**: 15 fully-featured packages
 - **Build Status**: ✅ Successful
 - **Platforms**: Kotlin/JS (Browser)
 
@@ -349,9 +371,8 @@ xyz.malefic.arachne/
 
 == 🎓 Learning Resources
 
-Check out the example games:
-- `examples/MinimalGame.kt` - Basic sprite movement
-- `examples/PhysicsDemo.kt` - Complete physics demonstration
+**Example Games**:
+- `library/src/jsMain/kotlin/xyz/malefic/arachne/examples/PhysicsDemo.kt` - Complete physics demonstration
 
 == 🤝 Contributing
 
@@ -377,10 +398,6 @@ This project is licensed under the MIT License - see the link:LICENSE[LICENSE] f
 
 Om Gupta - https://github.com/OmyDaGreat[@OmyDaGreat] - ogupta4242@gmail.com
 
-Project Link: https://github.com/OmyDaGreat/Arachne
-
 '''
 
 **Made with ❤️ for the Kobweb community**
-
-**Status**: ✅ **COMPLETE** (Phases 1-4 Implemented)
