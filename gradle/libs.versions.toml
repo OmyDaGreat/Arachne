@@ -10,6 +10,7 @@ serialization = "1.8.0"
 [libraries]
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "compose" }
+compose-web-core = { group = "org.jetbrains.compose.web", name = "web-core", version.ref = "compose" }
 kobweb-core = { module = "com.varabyte.kobweb:kobweb-core", version.ref = "kobweb" }
 kobweb-silk = { module = "com.varabyte.kobweb:kobweb-silk", version.ref = "kobweb" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
@@ -23,4 +24,4 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
-kobweb = ['kobweb-silk', 'kobweb-core']
+kobweb = ['kobweb-silk', 'kobweb-core', 'compose-web-core']

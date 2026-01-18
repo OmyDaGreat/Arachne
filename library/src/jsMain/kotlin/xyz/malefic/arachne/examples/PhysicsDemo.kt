@@ -1,6 +1,5 @@
 package xyz.malefic.arachne.examples
 
-import org.w3c.dom.HTMLCanvasElement
 import xyz.malefic.arachne.animation.TweenSystem
 import xyz.malefic.arachne.audio.AudioManager
 import xyz.malefic.arachne.core.*
@@ -20,9 +19,7 @@ import xyz.malefic.arachne.physics.*
  * - Camera shake
  * - Tweening animations
  */
-class PhysicsDemo(
-    canvas: HTMLCanvasElement,
-) : Game(canvas) {
+class PhysicsDemo : Game() {
     private val world = World()
     private lateinit var player: Entity
 

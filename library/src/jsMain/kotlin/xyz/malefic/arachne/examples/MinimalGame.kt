@@ -1,6 +1,5 @@
 package xyz.malefic.arachne.examples
 
-import org.w3c.dom.HTMLCanvasElement
 import xyz.malefic.arachne.core.*
 import xyz.malefic.arachne.debug.GameDebug
 import xyz.malefic.arachne.graphics.*
@@ -11,9 +10,7 @@ import xyz.malefic.arachne.math.Vector2
 /**
  * A minimal example game demonstrating the core features of Arachne.
  */
-class MinimalGame(
-    canvas: HTMLCanvasElement,
-) : Game(canvas) {
+class MinimalGame : Game() {
     private val world = World()
     private lateinit var player: Entity
 

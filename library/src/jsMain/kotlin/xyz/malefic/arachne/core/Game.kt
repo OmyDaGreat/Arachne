@@ -7,15 +7,18 @@ import xyz.malefic.arachne.graphics.Camera
 import xyz.malefic.arachne.input.Input
 import xyz.malefic.arachne.scene.SceneManager
 
-abstract class Game(
-    val canvas: HTMLCanvasElement,
-) {
-    val ctx: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D
+abstract class Game {
+    lateinit var canvas: HTMLCanvasElement
+        internal set
+    lateinit var ctx: CanvasRenderingContext2D
+        internal set
     val camera = Camera()
     val sceneManager = SceneManager()
-    protected val clock = GameClock()
+    val clock = GameClock()
 
-    init {
+    internal fun initializeCanvas(canvasElement: HTMLCanvasElement) {
+        canvas = canvasElement
+        ctx = canvas.getContext("2d") as CanvasRenderingContext2D
         camera.setSize(canvas.width.toFloat(), canvas.height.toFloat())
         Input.initialize(canvas)
     }
