@@ -9,6 +9,7 @@ import xyz.malefic.arachne.math.Vector2
 
 /**
  * A minimal example game demonstrating the core features of Arachne.
+ * Shows basic player movement and automated rendering with RenderSystem.
  */
 class MinimalGame : Game() {
     private val world = World()
@@ -18,6 +19,10 @@ class MinimalGame : Game() {
         GameDebug.showFPS = true
         camera.position = Vector2(400f, 300f)
 
+        // Setup automated rendering system
+        world.addSystem(RenderSystem(ctx, camera))
+
+        // Create player entity
         player =
             Entity().apply {
                 tag = "player"
@@ -41,19 +46,7 @@ class MinimalGame : Game() {
 
     override fun render() {
         super.render()
-        camera.applyTransform(ctx)
-        world.getEntitiesWith(Transform::class, Sprite::class).forEach { entity ->
-            val t = entity.get<Transform>()!!
-            val s = entity.get<Sprite>()!!
-            ctx.fillStyle = "#ff6b6b"
-            ctx.fillRect(
-                (t.position.x - s.width / 2).toDouble(),
-                (t.position.y - s.height / 2).toDouble(),
-                s.width.toDouble(),
-                s.height.toDouble(),
-            )
-        }
-        camera.resetTransform(ctx)
+        // RenderSystem handles sprite rendering automatically
         GameDebug.drawDebugInfo(ctx, getFPS(), world)
     }
 }

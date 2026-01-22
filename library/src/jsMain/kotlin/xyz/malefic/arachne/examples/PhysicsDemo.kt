@@ -27,12 +27,16 @@ class PhysicsDemo : Game() {
         GameDebug.showFPS = true
         GameDebug.showColliders = true
 
-        // Create physics system
+        // Setup systems (order matters - physics before rendering)
         val physicsSystem = PhysicsSystem(gravity = Vector2(0f, 500f))
         world.addSystem(physicsSystem)
-        world.addSystem(RenderSystem(ctx, camera))
         world.addSystem(AnimationSystem())
         world.addSystem(TweenSystem())
+
+        // Setup rendering systems
+        val renderSystem = RenderSystem(ctx, camera)
+        renderSystem.backgroundColor = "#1a1a2e"
+        world.addSystem(renderSystem)
         world.addSystem(ParticleRenderSystem())
 
         // Create ground
@@ -123,45 +127,15 @@ class PhysicsDemo : Game() {
     }
 
     override fun render() {
-        ctx.fillStyle = "#1a1a2e"
-        ctx.fillRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
+        super.render()
+        // RenderSystem and ParticleRenderSystem handle rendering automatically
 
-        camera.applyTransform(ctx)
-
-        world.getEntitiesWith(Transform::class, Sprite::class).forEach { entity ->
-            val t = entity.get<Transform>()!!
-            val s = entity.get<Sprite>()!!
-
-            ctx.save()
-            ctx.translate(t.position.x.toDouble(), t.position.y.toDouble())
-            ctx.rotate(t.rotation.toDouble())
-
-            ctx.fillStyle =
-                when (entity.tag) {
-                    "player" -> "#ff6b6b"
-                    "box" -> "#4ecdc4"
-                    "ground" -> "#95a99c"
-                    else -> "#ffffff"
-                }
-            ctx.fillRect(
-                (-s.width / 2).toDouble(),
-                (-s.height / 2).toDouble(),
-                s.width.toDouble(),
-                s.height.toDouble(),
-            )
-            ctx.restore()
-        }
-
-        world.getEntitiesWith(Transform::class, ParticleEmitter::class).forEach { entity ->
-            entity.get<ParticleEmitter>()?.render(ctx)
-        }
-
-        camera.resetTransform(ctx)
-
+        // Debug overlays
         GameDebug.drawDebugInfo(ctx, getFPS(), world)
         GameDebug.drawColliders(ctx, world, camera)
         GameDebug.drawGrid(ctx, camera)
 
+        // Instructions
         ctx.fillStyle = "white"
         ctx.font = "14px monospace"
         ctx.fillText("WASD/Arrows to move, Space to jump", 10.0, canvas.height - 20.0)
